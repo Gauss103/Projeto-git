@@ -1,0 +1,48 @@
+---
+title: "Experimentação sobre pulgões na cultura de pepinos"
+author: "Iuri S. Manoel"
+date: "15/05/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+  Este experimento tem como objetivo comparar os métodos utilizados para o controle de pulgões na cultura de pepino após 36h de sua pulverização. Neste caso, os métodos de controle (inseticidas) da praga são os tratamentos: Testemunha, Azinfós etílico, Supracid 40CE dose 1, Supracid 40 CE dose 2 e Diazinon 60 CE. Foi utilizado o delineamento inteiramente casualizado com 6 repetições. Assim, considere o banco de dados: 
+```{r}
+library(labestData)
+dados<-(BanzattoQd3.2.1)
+head(dados,10)
+```
+
+  Usando a função summary e o pacote ExpDes.pt pode-se obter uma visão geral dos dados.
+
+```{r}
+summary(dados)
+```
+
+  Observe que, dentre todos os tratamentos testados, o mínimo de pulgões foi 44, máximo 3020 e a média 865.4. Agora utilizando o pacote ExpDest.pt tem-se:
+
+```{r}
+library(ExpDes.pt)
+dic(trat,pulgoes)
+```
+  Veja que os valores não são considerados normais e, portanto, não se pode considerar a análise de variância dos dados, pois a normalidade é uma das pressuposições para tal. Entretanto, há um recurso para normalizar os dados: a transformação da variável. Considere então a transformação:
+
+```{r}
+dic(trat,sqrt(pulgoes))
+```
+  Veja que agora os dados podem ser considerados normais e, consequentemente, pode-se considerar a tabela de ANAVA. Observe que por esta tabela há uma difereça significativa entre os tratamentos, pois o F-calculado>F-tabelado (116.36>8.93). Considere ainda o teste Tukey, utilizado para comparar e classificar os tratamentos entre si. Nele estão classificados quatro grupos (a,b,c e d), no qual o grupo d apresenta as menores médias de pulgões dentre as demais. Como suporte, considere o plot Tratamentos X Número de pulgões 36h após a pulverização a seguir:
+
+```{r}
+library(lattice)
+xyplot(pulgoes ~ trat, data = BanzattoQd3.2.1,
+       xlab = "Tratamentos",
+       ylab = "Número de pulgões 36h após pulverização")
+```
+  
+  Portanto, os tratamentos Supracid 40 CE dose 2 e Diazinon 60 CE são os melhores métodos para controle de pulgões na cultura de pepino, mas não se diferem entre si. 
+
+
+
